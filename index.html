@@ -3,199 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>New Year Surprise</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<title>Happy New Year 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: white; overflow: hidden; font-family: 'Playfair Display', serif; }
-
-    #galaxy { position: fixed; inset: 0; background: radial-gradient(circle at 50% 100%, #0a0a2a 0%, #000 100%); z-index: -1; }
-    .star { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: blink var(--d) infinite; }
-    @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
-
-    .page { position: fixed; inset: 0; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; }
-    .page.active { display: flex; }
-
-    /* Updated Intro Text */
-    #wish { font-size: 2.2rem; font-weight: bold; margin-bottom: 20px; color: #fff; text-shadow: 0 0 10px #ff00ff; animation: fadeUp 2s ease; }
-    #tapBtn { font-family: 'Cinzel'; font-size: 1.2rem; cursor: pointer; color: #ffddaa; animation: pulse 1.5s infinite; }
-    
-    @keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
-
-    /* Countdown */
-    .count { font-size: 8rem; font-family: 'Cinzel'; color: #ffddaa; }
-
-    /* Poem Styles */
-    .line { font-size: 1.3rem; margin: 12px 0; opacity: 0; transform: translateY(20px); transition: all 1.5s ease; width: 100%; max-width: 600px; }
-    .active .line { opacity: 1; transform: translateY(0); }
-
-    /* Flower Canvas */
-    #flowerCanvas { position: fixed; inset: 0; cursor: crosshair; display: none; z-index: 5; }
-    #instruction { position: fixed; bottom: 40px; width: 100%; text-align: center; font-family: 'Cinzel'; color: #ffddaa; pointer-events: none; opacity: 0.7; z-index: 6; }
-
-    /* Hidden Music Player */
-    #musicPlayer { position: absolute; visibility: hidden; width: 0; height: 0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #000; color: white; overflow: hidden; font-family: 'Playfair Display', serif; }
+canvas { position: fixed; inset: 0; filter: drop-shadow(0 0 5px rgba(255,100,200,0.5)); }
+#bgCanvas { z-index: 1; }
+#flowerCanvas { z-index: 5; pointer-events: none; }
+.page { position: fixed; inset: 0; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; z-index: 10; background: rgba(0,0,0,0.85); transition: opacity 1s ease; }
+.page.active { display: flex; }
+#wish { font-size: 2.8rem; font-weight: bold; color: #fff; text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 40px #ff00ff; margin-bottom: 30px; letter-spacing: 2px; }
+#tapBtn { font-family: 'Cinzel'; font-size: 1.4rem; cursor: pointer; color: #ffddaa; border: 2px solid #ffddaa; padding: 15px 40px; border-radius: 50px; background: rgba(255,221,170,0.1); box-shadow: 0 0 15px #ffddaa; animation: glow 2s infinite; }
+.count { font-size: 10rem; font-family: 'Cinzel'; color: #fff; text-shadow: 0 0 30px #ffddaa, 0 0 60px #ffddaa; }
+#catBox { position: relative; width: 400px; height: 300px; display: flex; align-items: flex-end; justify-content: center; overflow: visible; }
+.cat-body { fill: #fff; filter: drop-shadow(0 0 10px #fff); }
+#cat1 { position: absolute; left: 20px; bottom: 0; width: 150px; transition: transform 0.6s ease; z-index: 15; }
+#cat2 { position: absolute; right: 20px; bottom: 0; width: 150px; transform: scaleX(-1); z-index: 14; }
+.line { font-size: 1.4rem; margin: 15px 0; opacity: 0; transform: translateY(30px); color: #ffddaa; text-shadow: 0 0 10px #000; font-weight: bold; }
+.active .line { opacity: 1; transform: translateY(0); }
+#heartPage { background: #000; z-index: 25; }
+.love_word { color: #ff69b4; font-size: 1.3rem; white-space: nowrap; text-shadow: 0 0 15px #fff; font-weight: 900; }
+@keyframes glow { 0%, 100% { box-shadow: 0 0 10px #ffddaa; transform: scale(1); } 50% { box-shadow: 0 0 30px #ffddaa; transform: scale(1.05); } }
+.love_horizontal { animation: horizontal 10s infinite alternate ease-in-out; animation-delay: calc(var(--i) * -300ms); position: absolute; top: 50%; left: 50%; margin-top: -225px; margin-left: -225px; }
+.love_vertical { animation: vertical 20s infinite linear; animation-delay: calc(var(--i) * -300ms); }
+@keyframes horizontal { from { transform: translateX(0px); } to { transform: translateX(450px); } }
+@keyframes vertical { 0% { transform: translateY(180px); } 18% { transform: translateY(0px); } 25% { transform: translateY(112.5px); } 32% { transform: translateY(0px); } 50% { transform: translateY(180px); } 75% { transform: translateY(450px); } 100% { transform: translateY(180px); } }
 </style>
 </head>
 <body>
-
-<div id="galaxy"></div>
+<canvas id="bgCanvas"></canvas>
 <canvas id="flowerCanvas"></canvas>
-<div id="instruction" style="display:none;">Tap to Grow Your Garden...</div>
-
-<div id="musicPlayer"></div>
-
+<div id="musicBox"></div>
 <div id="intro" class="page active">
-    <div id="wish">HAPPY NEW YEAR MY CUTIE PIE ♥️</div>
-    <div id="tapBtn">TAP HERE😊</div>
+<div id="wish">HAPPY NEW YEAR<br>MY CUTIE PIE ♥️</div>
+<button id="tapBtn">TAP HERE 😊</button>
 </div>
-
 <div id="countdown" class="page">
-    <div class="count" id="countNum">3</div>
+<div class="count" id="countNum">3</div>
 </div>
-
-<div id="poem1" class="page"></div>
-
+<div id="catPage" class="page">
+<div id="catBox">
+<svg id="cat1" viewBox="0 0 100 100"><path class="cat-body" d="M30 90 Q30 50 50 50 Q70 50 70 90 L30 90 Z"/><circle cx="42" cy="65" r="3" fill="#000"/><circle cx="58" cy="65" r="3" fill="#000"/><path d="M48 72 Q50 75 52 72" fill="none" stroke="#000"/><path class="cat-body" d="M35 55 L25 35 L45 52 Z"/><path class="cat-body" d="M65 55 L75 35 L55 52 Z"/></svg>
+<svg id="cat2" viewBox="0 0 100 100"><path class="cat-body" d="M30 90 Q30 50 50 50 Q70 50 70 90 L30 90 Z" style="fill:#f0f0f0"/><circle cx="42" cy="65" r="3" fill="#000"/><circle cx="58" cy="65" r="3" fill="#000"/><path d="M48 72 Q50 75 52 72" fill="none" stroke="#000"/><path class="cat-body" d="M35 55 L25 35 L45 52 Z" style="fill:#f0f0f0"/><path class="cat-body" d="M65 55 L75 35 L55 52 Z" style="fill:#f0f0f0"/></svg>
+</div>
+<h2 id="catText" style="margin-top:20px; font-family:'Cinzel'; color:#ffddaa;">Look at us!</h2>
+</div>
+<div id="poemPage" class="page"></div>
 <div id="final" class="page">
-    <h1 style="font-size: 3.5rem; font-family: 'Cinzel'; color: #ffddaa;">✨ 2026 ✨</h1>
-    <p style="margin-top: 20px;">May this year be as bright as your smile.</p>
+<h1 style="font-size: 4rem; color: #ffddaa; text-shadow: 0 0 20px #fff;">2026</h1>
+<p style="margin: 20px 0; font-style: italic;">Touch the screen to bloom our garden...</p>
+<button id="nextToHeart" style="padding: 15px 35px; background: none; border: 2px solid #fff; color: #fff; border-radius: 50px; cursor: pointer; font-family: 'Cinzel';">View My Gratitude ❤️</button>
 </div>
-
+<div id="heartPage" class="page"><div id="ui"></div></div>
 <script>
-// --- Star Background ---
-for(let i=0; i<150; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.style.width = s.style.height = Math.random() * 3 + 'px';
-    s.style.left = Math.random() * 100 + 'vw';
-    s.style.top = Math.random() * 100 + 'vh';
-    s.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
-    document.body.appendChild(s);
-}
-
-// --- Music Logic ---
-function playMusic() {
-    // Embedding Indila - Love Story with Autoplay enabled
-    const player = document.getElementById('musicPlayer');
-    player.innerHTML = `<iframe src="https://www.youtube.com/embed/2Bc9ET7XGDg?autoplay=1" allow="autoplay"></iframe>`;
-}
-
-// --- Navigation Logic ---
-const introPage = document.getElementById('intro');
-introPage.onclick = () => {
-    playMusic(); // Starts song: Indila - Love Story [00:00:14]
-    introPage.classList.remove('active');
-    startCountdown();
-};
-
-function startCountdown() {
-    document.getElementById('countdown').classList.add('active');
-    let c = 3;
-    const timer = setInterval(() => {
-        c--;
-        if(c > 0) document.getElementById('countNum').innerText = c;
-        else {
-            clearInterval(timer);
-            showPoem();
-        }
-    }, 1000);
-}
-
-const poemLines = [
-    "In a sky crowded with stars,", "You remain the only moon I see.",
-    "Among billions of faces,", "It is only yours I search for.",
-    "You are the warmth I choose,", "Even knowing the cost.",
-    "I may not be by your side,", "But I will always be in your light."
-];
-
-function showPoem() {
-    document.getElementById('countdown').classList.remove('active');
-    const pPage = document.getElementById('poem1');
-    pPage.classList.add('active');
-    
-    poemLines.forEach((text, i) => {
-        const div = document.createElement('div');
-        div.className = 'line';
-        div.innerText = text;
-        div.style.transitionDelay = (i * 1.5) + 's';
-        pPage.appendChild(div);
-    });
-
-    setTimeout(startFlowers, poemLines.length * 1500 + 3000);
-}
-
-// --- Flower Engine ---
-const canvas = document.getElementById('flowerCanvas');
-const ctx = canvas.getContext('2d');
-let flowers = [];
-
-function startFlowers() {
-    document.getElementById('poem1').classList.remove('active');
-    canvas.style.display = 'block';
-    document.getElementById('instruction').style.display = 'block';
-    resize();
-    animate();
-    
-    setTimeout(() => {
-        canvas.style.display = 'none';
-        document.getElementById('instruction').style.display = 'none';
-        document.getElementById('final').classList.add('active');
-    }, 15000);
-}
-
-window.addEventListener('resize', resize);
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-
-class Flower {
-    constructor(x, y) {
-        this.x = x;
-        this.y = window.innerHeight;
-        this.targetY = y;
-        this.cp1x = x + (Math.random() - 0.5) * 100;
-        this.growth = 0;
-        this.color = `hsl(${Math.random() * 40 + 330}, 100%, 60%)`;
-    }
-    draw() {
-        if(this.growth < 1) this.growth += 0.02;
-        ctx.beginPath();
-        ctx.strokeStyle = '#2d5a27';
-        ctx.lineWidth = 2;
-        ctx.moveTo(this.x, window.innerHeight);
-        let currentY = window.innerHeight - (window.innerHeight - this.targetY) * this.growth;
-        ctx.quadraticCurveTo(this.cp1x, (window.innerHeight + currentY)/2, this.x, currentY);
-        ctx.stroke();
-        if(this.growth >= 1) this.drawPetals(this.x, this.targetY);
-    }
-    drawPetals(x, y) {
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = this.color;
-        ctx.fillStyle = this.color;
-        for(let i=0; i<6; i++) {
-            ctx.beginPath();
-            ctx.ellipse(x, y, 15, 8, (i * 60) * Math.PI/180, 0, Math.PI*2);
-            ctx.fill();
-        }
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(x, y, 4, 0, Math.PI*2);
-        ctx.fill();
-    }
-}
-
-canvas.addEventListener('mousedown', (e) => {
-    flowers.push(new Flower(e.clientX, e.clientY));
-});
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    flowers.forEach(f => f.draw());
-    requestAnimationFrame(animate);
-}
+const bgCanvas = document.getElementById('bgCanvas'); const bgCtx = bgCanvas.getContext('2d'); const flCanvas = document.getElementById('flowerCanvas'); const flCtx = flCanvas.getContext('2d'); let particles = []; let flowers = []; const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$";
+function resize() { bgCanvas.width = flCanvas.width = window.innerWidth; bgCanvas.height = flCanvas.height = window.innerHeight; }
+window.addEventListener('resize', resize); resize();
+class Particle { constructor(x, y) { this.x = x; this.y = y; this.char = chars[Math.floor(Math.random() * chars.length)]; this.v = Math.random() * 2 + 0.5; this.color = "rgba(255, 100, 200, 0.3)"; this.forming = false; this.tx = x; this.ty = y; } update() { if (!this.forming) { this.y += this.v; if (this.y > bgCanvas.height) this.y = -20; } else { this.x += (this.tx - this.x) * 0.1; this.y += (this.ty - this.y) * 0.1; this.color = "#fff"; } } draw() { bgCtx.fillStyle = this.color; bgCtx.font = "16px monospace"; bgCtx.fillText(this.char, this.x, this.y); } }
+function initGrid() { for(let i=0; i<800; i++) particles.push(new Particle(Math.random()*bgCanvas.width, Math.random()*bgCanvas.height)); }
+initGrid();
+document.getElementById('tapBtn').onclick = () => { document.getElementById('musicBox').innerHTML = `<iframe src="https://www.youtube.com/embed/2Bc9ET7XGDg?autoplay=1" style="display:none" allow="autoplay"></iframe>`; document.getElementById('intro').classList.remove('active'); startCountdown(); };
+function startCountdown() { document.getElementById('countdown').classList.add('active'); let c = 3; const timer = setInterval(() => { c--; if(c > 0) document.getElementById('countNum').innerText = c; else { clearInterval(timer); startWordFormation(); } }, 1000); }
+function startWordFormation() { document.getElementById('countdown').classList.remove('active'); const text = "HAPPY NEW YEAR"; const startX = (bgCanvas.width/2) - (text.length * 15); for(let i=0; i<text.length; i++) { let p = particles[i]; p.char = text[i]; p.tx = startX + (i * 30); p.ty = bgCanvas.height/2; p.forming = true; } setTimeout(() => { particles.forEach(p => p.forming = false); showCatBump(); }, 4000); }
+function showCatBump() { document.getElementById('catPage').classList.add('active'); const c1 = document.getElementById('cat1'); setTimeout(() => { c1.style.transform = "translateX(100px) rotate(10deg)"; setTimeout(() => { document.getElementById('catText').innerText = "BOOP! HAPPY 2026!"; setTimeout(showPoem, 3000); }, 600); }, 1000); }
+function showPoem() { document.getElementById('catPage').classList.remove('active'); const lines = ["A simple word with a deep meaning", "it's not just a word it's a feeling", "I don't know why but whenever I think about you", "a smile always appears on my face.", "Maybe because you're special to me.", "Happy New Year my cutie pie!"]; const container = document.getElementById('poemPage'); container.classList.add('active'); lines.forEach((l, i) => { const d = document.createElement('div'); d.className = 'line'; d.innerText = l; d.style.transitionDelay = `${i * 1.5}s`; container.appendChild(d); }); setTimeout(startFlowerMode, lines.length * 1500 + 3000); }
+function startFlowerMode() { document.getElementById('poemPage').classList.remove('active'); document.getElementById('final').classList.add('active'); window.addEventListener('mousedown', (e) => { if(document.getElementById('final').classList.contains('active')) flowers.push({ x: e.clientX, ty: e.clientY, growth: 0, color: `hsl(${Math.random()*60 + 300}, 100%, 70%)` }); }); }
+document.getElementById('nextToHeart').onclick = (e) => { e.stopPropagation(); document.getElementById('final').classList.remove('active'); showHeartPage(); };
+function showHeartPage() { document.getElementById('heartPage').classList.add('active'); const ui = document.getElementById('ui'); for (let i = 1; i <= 100; i++) { const l = document.createElement('div'); l.className = 'love_horizontal'; l.style.setProperty('--i', i); const v = document.createElement('div'); v.className = 'love_vertical'; const w = document.createElement('div'); w.className = 'love_word'; w.textContent = 'I love you'; v.appendChild(w); l.appendChild(v); ui.appendChild(l); } }
+function animate() { bgCtx.fillStyle = "rgba(0,0,0,0.15)"; bgCtx.fillRect(0,0,bgCanvas.width, bgCanvas.height); particles.forEach(p => { p.update(); p.draw(); }); flCtx.clearRect(0,0,flCanvas.width, flCanvas.height); flowers.forEach(f => { if(f.growth < 1) f.growth += 0.015; flCtx.shadowBlur = 10; flCtx.shadowColor = f.color; flCtx.strokeStyle = "#2d5a27"; flCtx.lineWidth = 4; flCtx.beginPath(); flCtx.moveTo(f.x, flCanvas.height); let curY = flCanvas.height - (flCanvas.height - f.ty) * f.growth; flCtx.quadraticCurveTo(f.x + 40, (flCanvas.height + curY)/2, f.x, curY); flCtx.stroke(); if(f.growth >= 1) { flCtx.fillStyle = f.color; for(let i=0; i<6; i++) { flCtx.beginPath(); flCtx.ellipse(f.x, f.ty, 18, 10, (i*60)*Math.PI/180, 0, Math.PI*2); flCtx.fill(); } flCtx.fillStyle = "#fff"; flCtx.beginPath(); flCtx.arc(f.x, f.ty, 5, 0, Math.PI*2); flCtx.fill(); } }); requestAnimationFrame(animate); }
+animate();
 </script>
 </body>
 </html>
-
