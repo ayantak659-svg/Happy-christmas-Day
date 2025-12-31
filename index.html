@@ -1,150 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy New Year 2026</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: #fff; overflow: hidden; font-family: 'Playfair Display', serif; }
-    canvas { position: fixed; inset: 0; }
-    #matrixCanvas { z-index: 1; }
-    #flowerCanvas { z-index: 5; pointer-events: none; }
-    .page { position: fixed; inset: 0; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 10; background: rgba(0,0,0,0.7); transition: opacity 1s; }
-    .page.active { display: flex; }
-    #tapBtn { font-family: 'Cinzel'; font-size: 1.5rem; cursor: pointer; color: #ffddaa; border: 2px solid #ffddaa; padding: 15px 40px; border-radius: 50px; background: transparent; box-shadow: 0 0 15px #ffddaa; animation: pulse 1.5s infinite; }
-    .line { font-size: 1.4rem; margin: 10px 0; opacity: 0; transform: translateY(20px); transition: 1s; color: #ffddaa; }
-    .active .line { opacity: 1; transform: translateY(0); }
-    /* Flower Logic from User */
-    .flower { position: absolute; bottom: 10vmin; transform-origin: bottom center; z-index: 10; --fl-speed: 0.8s; }
-    #finalCanvas { z-index: 20; position: fixed; inset: 0; display: none; }
-    @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
-    #musicBox { position: absolute; visibility: hidden; }
-  </style>
+<meta charset="UTF-8">
+<title>Happy New Year 🎉</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  background: #000;
+  color: white;
+}
+
+/* Pages */
+.page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: opacity 1s ease;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Text */
+h1 {
+  font-size: 3rem;
+  text-align: center;
+}
+
+.tap {
+  margin-top: 20px;
+  opacity: 0.8;
+}
+
+/* LAST PAGE FLOWER EFFECT */
+.flower {
+  position: absolute;
+  bottom: 10vmin;
+  transform-origin: bottom center;
+  z-index: 10;
+  --fl-speed: 0.8s;
+}
+
+/* Canvas */
+canvas {
+  position: absolute;
+  inset: 0;
+}
+</style>
 </head>
+
 <body>
-  <div id="musicBox"></div>
-  <canvas id="matrixCanvas"></canvas>
-  <canvas id="flowerCanvas"></canvas>
-  <canvas id="finalCanvas"></canvas>
 
-  <div id="intro" class="page active">
-    <h1 style="color:#fff; margin-bottom:30px; text-shadow:0 0 20px #ff00ff; font-family:'Cinzel';">FOR MY CUTIE PIE</h1>
-    <button id="tapBtn">CLICK TO START 🎁</button>
-  </div>
+<!-- PAGE 1 -->
+<div class="page" id="page1">
+  <h1>✨ Something Special ✨</h1>
+  <div class="tap">Tap to continue</div>
+</div>
 
-  <div id="poemPage" class="page"></div>
+<!-- PAGE 2 -->
+<div class="page hidden" id="page2">
+  <h1>🎉 Happy New Year 🎉</h1>
+  <div class="tap">Tap again</div>
+</div>
 
-  <div id="final" class="page">
-    <h1 style="font-size: 3rem; color: #ffddaa; margin-bottom: 20px;">OUR 2026 GARDEN</h1>
-    <p style="color:#fff; font-style:italic;">Tap to watch us bloom...</p>
-    <button id="nextToHeart" style="margin-top: 40px; padding: 12px 25px; background: none; border: 1px solid white; color: white; border-radius: 50px; cursor: pointer;">Final Surprise ❤️</button>
-  </div>
+<!-- PAGE 3 (LAST) -->
+<div class="page hidden" id="page3">
+  <h1>🌸 Wishing You Joy 🌸</h1>
 
-  <script>
-    // --- Matrix Rain Logic (Like Reference Site) ---
-    const mCanvas = document.getElementById('matrixCanvas'); const mctx = mCanvas.getContext('2d');
-    const fCanvas = document.getElementById('flowerCanvas'); const fctx = fCanvas.getContext('2d');
-    let width, height, columns; const fontSize = 20; let drops = [];
-    const targetText = "HAPPY NEW YEAR TO YOU"; let isRevealing = false;
+  <div class="flower">🌺</div>
 
-    function initMatrix() {
-      width = mCanvas.width = fCanvas.width = window.innerWidth;
-      height = mCanvas.height = fCanvas.height = window.innerHeight;
-      columns = Math.floor(width / fontSize);
-      drops = []; for (let i = 0; i < columns; i++) drops[i] = Math.random() * -100;
-    }
-    window.addEventListener('resize', initMatrix); initMatrix();
+  <canvas id="canvas"></canvas>
+</div>
 
-    function drawMatrix() {
-      mctx.fillStyle = "rgba(0, 0, 0, 0.05)"; mctx.fillRect(0, 0, width, height);
-      mctx.font = fontSize + "px monospace";
-      for (let i = 0; i < drops.length; i++) {
-        const char = String.fromCharCode(Math.random() * 128);
-        const x = i * fontSize; const y = drops[i] * fontSize;
-        if (isRevealing) {
-          const centerX = Math.floor(columns / 2) - Math.floor(targetText.length / 2);
-          if (i >= centerX && i < centerX + targetText.length && Math.abs(y - height / 2) < 20) {
-            mctx.fillStyle = "#fff"; mctx.shadowBlur = 15; mctx.shadowColor = "#ff00ff";
-            mctx.fillText(targetText[i - centerX], x, height / 2);
-            mctx.shadowBlur = 0; continue;
-          }
-        }
-        mctx.fillStyle = "#0f0"; mctx.fillText(char, x, y);
-        if (y > height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      }
-    }
+<!-- YOUTUBE AUDIO (AUTOPLAY SAFE) -->
+<iframe
+  id="music"
+  width="0"
+  height="0"
+  src="https://www.youtube.com/embed/2Bc9ET7XGDg?autoplay=1&mute=1&loop=1&playlist=2Bc9ET7XGDg"
+  frameborder="0"
+  allow="autoplay">
+</iframe>
 
-    // --- Interaction & Music Logic ---
-    document.getElementById('tapBtn').onclick = () => {
-      // Indila - Love Story Start
-      document.getElementById('musicBox').innerHTML = `<iframe src="https://www.youtube.com/embed/2Bc9ET7XGDg?autoplay=1" allow="autoplay"></iframe>`;
-      document.getElementById('intro').classList.remove('active');
-      isRevealing = true;
-      setTimeout(() => { isRevealing = false; showPoem(); }, 6000);
-    };
+<script>
+/* Page navigation */
+let current = 1;
 
-    function showPoem() {
-      const lines = ["A simple word with a deep meaning", "it's not just a word it's a feeling", "I don't know why but whenever I think about you", "a smile always appears on my face.", "Maybe because you're special to me.", "Happy New Year my cutie pie!"];
-      const container = document.getElementById('poemPage'); container.classList.add('active');
-      lines.forEach((l, i) => { const d = document.createElement('div'); d.className = 'line'; d.innerText = l; d.style.transitionDelay = `${i * 1.8}s`; container.appendChild(d); });
-      setTimeout(() => { container.classList.remove('active'); startFlowers(); }, lines.length * 1800 + 4000);
-    }
+document.body.addEventListener('click', () => {
+  if (current === 1) {
+    page1.classList.add('hidden');
+    page2.classList.remove('hidden');
+    current++;
+  } else if (current === 2) {
+    page2.classList.add('hidden');
+    page3.classList.remove('hidden');
+    current++;
+    runLastPageCode();
+  }
+});
 
-    // --- Flower Page Logic ---
-    function startFlowers() {
-      document.getElementById('final').classList.add('active');
-      window.addEventListener('mousedown', (e) => {
-        if(document.getElementById('final').classList.contains('active')) {
-          growFlower(e.clientX, e.clientY);
-        }
-      });
-    }
+/* Unmute music after load */
+setTimeout(() => {
+  const iframe = document.getElementById('music');
+  iframe.src = iframe.src.replace("mute=1", "mute=0");
+}, 500);
 
-    function growFlower(x, y) {
-      // User requested .flower style growth
-      let g = 0; const color = `hsl(${Math.random()*60+320}, 100%, 75%)`;
-      const interval = setInterval(() => {
-        g += 0.02; fctx.strokeStyle = "#2d5a27"; fctx.lineWidth = 4;
-        fctx.beginPath(); fctx.moveTo(x, height);
-        let cy = height - (height-y)*g;
-        fctx.quadraticCurveTo(x+30, (height+cy)/2, x, cy); fctx.stroke();
-        if(g >= 1) {
-          clearInterval(interval);
-          fctx.fillStyle = color; fctx.shadowBlur = 15; fctx.shadowColor = color;
-          for(let i=0; i<6; i++) { fctx.beginPath(); fctx.ellipse(x, y, 15, 8, (i*60)*Math.PI/180, 0, Math.PI*2); fctx.fill(); }
-          fctx.fillStyle = "#fff"; fctx.beginPath(); fctx.arc(x, y, 4, 0, Math.PI*2); fctx.fill(); fctx.shadowBlur = 0;
-        }
-      }, 20);
-    }
+/* LAST PAGE CODE */
+function runLastPageCode() {
 
-    // --- Final Page Pointer Logic from User ---
-    document.getElementById('nextToHeart').onclick = () => {
-      document.getElementById('final').classList.remove('active');
-      const canvasEl = document.getElementById('finalCanvas');
-      canvasEl.style.display = 'block';
-      
-      const pointer = { x: 0.66, y: 0.3, clicked: true };
-      window.setTimeout(() => {
-        pointer.x = 0.75; pointer.y = 0.5; pointer.clicked = true;
-        renderFinalHeart(canvasEl, pointer);
-      }, 700);
-    };
+  /* ===== YOUR POINTER CODE (FIXED) ===== */
+  const canvasEl = document.querySelector('#canvas');
 
-    function renderFinalHeart(canvas, p) {
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = "#ff69b4"; ctx.font = "bold 40px sans-serif";
-      ctx.fillText("I LOVE YOU FOREVER", canvas.width * p.x, canvas.height * p.y);
-      // Continuous heart particle logic would go here
-    }
+  const pointer = {
+    x: 0.66,
+    y: 0.3,
+    clicked: true
+  };
 
-    function main() {
-      drawMatrix();
-      requestAnimationFrame(main);
-    }
-    main();
-  </script>
+  window.setTimeout(() => {
+    pointer.x = 0.75;
+    pointer.y = 0.5;
+    pointer.clicked = true;
+  }, 700);
+
+  /* Simple canvas animation */
+  const ctx = canvasEl.getContext('2d');
+  canvasEl.width = innerWidth;
+  canvasEl.height = innerHeight;
+
+  function draw() {
+    ctx.clearRect(0,0,canvasEl.width,canvasEl.height);
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.beginPath();
+    ctx.arc(pointer.x * canvasEl.width, pointer.y * canvasEl.height, 10, 0, Math.PI * 2);
+    ctx.fill();
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+}
+</script>
+
 </body>
 </html>
