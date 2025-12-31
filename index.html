@@ -2,246 +2,212 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>New Year Wish</title>
+<title>New Year Surprise for Shrija</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ===== GLOBAL ===== */
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:black;
-  overflow:hidden;
-  font-family:"Playfair Display",serif;
-  color:white;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Georgia",serif;}
+body{background:black;color:white;overflow:hidden;}
+.page{width:100vw;height:100vh;display:none;align-items:center;justify-content:center;text-align:center;padding:30px;position:relative;}
+.page.active{display:flex;flex-direction:column;}
+h1{font-size:2.4rem;margin-bottom:20px;}
+p{font-size:1.3rem;line-height:1.8;}
+button{margin-top:40px;padding:12px 30px;background:transparent;color:#fff;border:1px solid #fff;font-size:1rem;cursor:pointer;}
+button:hover{background:#fff;color:#000;}
 
-/* ===== STAR BACKGROUND ===== */
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:-2;
-}
+/* STAR BACKGROUND */
+canvas{position:fixed;inset:0;z-index:-2;}
 
-/* ===== START SCREEN ===== */
-#startScreen{
-  position:fixed;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  background:black;
-  z-index:10;
-  cursor:pointer;
-}
-#startScreen h1{
-  font-size:34px;
-  letter-spacing:3px;
-  margin-bottom:15px;
-}
-#startScreen p{
-  font-size:18px;
-  opacity:.8;
-}
-
-/* ===== POEM SECTIONS ===== */
-.section{
-  position:fixed;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:40px;
-  opacity:0;
-  animation:fadeText 6s ease forwards;
-}
-.section p{
-  font-size:24px;
-  line-height:1.8;
-  text-shadow:0 0 20px rgba(255,255,255,.3);
-}
-@keyframes fadeText{
-  0%{opacity:0;transform:translateY(30px)}
-  20%{opacity:1}
-  80%{opacity:1}
-  100%{opacity:0;transform:translateY(-30px)}
-}
-
-/* ===== FLOATING LOVE (YOUR CODE – FIXED) ===== */
-#ui{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:-1;
-}
-
-.love{
+/* FALLING NEW YEAR TEXT */
+.newYearText{
   position:absolute;
-  top:50%;
-  left:50%;
-  --i:1;
-}
-
-.love_horizontal{
-  animation:horizontal 10s infinite alternate ease-in-out;
-  animation-delay:calc(var(--i) * -300ms);
-}
-
-.love_vertical{
-  animation:vertical 20s infinite linear;
-  animation-delay:calc(var(--i) * -300ms);
-}
-
-.love_word{
-  color:#ea80b0;
-  font-size:1.4rem;
-  letter-spacing:2px;
-  white-space:nowrap;
-  text-shadow:0 0 12px #fff;
-}
-
-@keyframes horizontal{
-  from{transform:translateX(-220px)}
-  to{transform:translateX(220px)}
-}
-
-@keyframes vertical{
-  0%{transform:translateY(180px)}
-  50%{transform:translateY(-180px)}
-  100%{transform:translateY(180px)}
-}
-
-/* ===== NEW YEAR END ===== */
-#newYearEnd{
-  position:fixed;
-  inset:0;
-  background:black;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  top:0;
+  width:100%;
+  font-size:3rem;
+  font-weight:bold;
   text-align:center;
-  opacity:0;
-  animation:showEnd 3s ease forwards;
-  animation-delay:95s;
-  z-index:5;
+  color:#ffd700;
+  text-shadow:0 0 20px #fff;
+  animation:floater 5s linear forwards;
 }
-@keyframes showEnd{
-  to{opacity:1}
+@keyframes floater{
+  0%{top:-50px;opacity:0;}
+  20%{opacity:1;}
+  100%{top:80%;opacity:1;}
 }
-#newYearEnd h1{
-  font-size:52px;
-  letter-spacing:4px;
+
+/* COUNTDOWN/HAPPY NEW YEAR */
+.countdown{
+  position:absolute;
+  width:100%;
+  font-size:4rem;
+  font-weight:bold;
+  text-align:center;
+  top:30%;
+  color:#ff69b4;
+  text-shadow:0 0 15px #fff;
 }
-#newYearEnd h2{
-  margin-top:20px;
-  font-size:26px;
-  line-height:1.6;
+
+/* CAKE */
+.cake{
+  position:absolute;
+  bottom:20%;
+  left:50%;
+  transform:translateX(-50%);
+  width:120px;height:120px;
+  background:#ff6b6b;
+  border-radius:10px 10px 0 0;
 }
-#newYearEnd p{
-  margin-top:25px;
-  font-size:18px;
-  opacity:.85;
+.cake::after{
+  content:'';
+  position:absolute;
+  top:-20px;left:40px;
+  width:40px;height:20px;
+  background:#ffd700;
+  border-radius:50%;
 }
-.signature{
-  display:block;
-  margin-top:30px;
-  opacity:.6;
+
+/* CATS */
+.cat{
+  position:absolute;
+  width:80px;height:80px;
+  bottom:25%;
+  background:#fff;
+  border-radius:50%;
 }
+.cat.left{left:35%;}
+.cat.right{left:55%;}
+
+/* CAT FACE BUMP ANIMATION */
+@keyframes bump{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-20px);}
+  100%{transform:translateY(0);}
+}
+
+/* FLOWER PETALS */
+.petal{
+  position:absolute;
+  top:-10%;
+  width:20px;height:20px;
+  background:pink;
+  border-radius:50%;
+  opacity:0.8;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  0%{transform:translateY(0) rotate(0deg);}
+  100%{transform:translateY(110vh) rotate(360deg);}
+}
+
+/* BLOOM FLOWER */
+.flower{
+  width:120px;height:120px;position:relative;
+  animation:bloom 4s infinite alternate;
+}
+.petal2{
+  width:50px;height:80px;background:#ff8fab;border-radius:50%;
+  position:absolute;top:20px;left:35px;transform-origin:bottom center;
+}
+.petal2:nth-child(1){transform:rotate(0deg);}
+.petal2:nth-child(2){transform:rotate(72deg);}
+.petal2:nth-child(3){transform:rotate(144deg);}
+.petal2:nth-child(4){transform:rotate(216deg);}
+.petal2:nth-child(5){transform:rotate(288deg);}
+@keyframes bloom{from{transform:scale(0.7);}to{transform:scale(1.1);}}
 </style>
 </head>
-
 <body>
 
 <canvas id="stars"></canvas>
 
-<!-- START -->
-<div id="startScreen">
+<!-- PAGE 1: INTRO -->
+<div class="page active" id="page1">
   <h1>A wish to you my cutie pie😊</h1>
   <p>tap here♥️</p>
+  <button onclick="nextPage()">Tap to Start</button>
+</div>
+
+<!-- PAGE 2: FALLING NEW YEAR -->
+<div class="page" id="page2">
+  <div class="newYearText">Happy New Year!</div>
+  <button onclick="nextPage()" style="margin-top:60%;">Next</button>
+</div>
+
+<!-- PAGE 3: COUNTDOWN -->
+<div class="page" id="page3">
+  <div class="countdown" id="countdown">3</div>
+</div>
+
+<!-- PAGE 4: CAKE & CATS -->
+<div class="page" id="page4">
+  <div class="cake"></div>
+  <div class="cat left" id="catLeft"></div>
+  <div class="cat right" id="catRight"></div>
+  <button onclick="nextPage()">Next</button>
+</div>
+
+<!-- PAGE 5: POEMS -->
+<div class="page" id="page5">
+  <p>
+    I know we will never be together<br>
+    But please<br>
+    Allow me this much<br>
+    Let me tell you how<br>
+    In a sky crowded with stars<br>
+    You remain the only moon I see
+  </p>
+  <button onclick="nextPage()">Next</button>
+</div>
+
+<div class="page" id="page6">
+  <p>
+    Among billions of faces in this world<br>
+    It is only your eyes I ever search for<br>
+    Let me tell you how you are the fire<br>
+    I would reach for without fear of being burned<br>
+    The warmth I would choose even knowing the cost
+  </p>
+  <button onclick="nextPage()">Next</button>
+</div>
+
+<!-- PAGE 7: FLOWER ANIMATION 1 -->
+<div class="page" id="page7">
+  <h1>🌸</h1>
+  <p>Some feelings fall softly, like petals.</p>
+  <button onclick="nextPage()">Next</button>
+</div>
+
+<!-- PAGE 8: FLOWER ANIMATION 2 -->
+<div class="page" id="page8">
+  <h1>🌸</h1>
+  <p>Some bloom silently, yet beautifully.</p>
+  <div class="flower">
+    <div class="petal2"></div>
+    <div class="petal2"></div>
+    <div class="petal2"></div>
+    <div class="petal2"></div>
+    <div class="petal2"></div>
+  </div>
+  <button onclick="nextPage()">Finish</button>
+</div>
+
+<!-- FINAL PAGE -->
+<div class="page" id="page9">
+  <h1>Happy New Year!</h1>
+  <p>May this year be brighter, calmer, and filled with joy.</p>
 </div>
 
 <!-- MUSIC -->
 <iframe id="music" src="" allow="autoplay" style="display:none"></iframe>
 
-<!-- FLOATING LOVE -->
-<div id="ui"></div>
-
-<!-- POEMS -->
-<div class="section" style="animation-delay:5s">
-<p>
-I know we will never be together<br>
-But please<br>
-Allow me this much<br>
-Let me tell you how<br>
-In a sky crowded in stars<br>
-You remain the only moon I see
-</p>
-</div>
-
-<div class="section" style="animation-delay:20s">
-<p>
-Among billions of faces in this world<br>
-It is only your eyes I ever search for
-</p>
-</div>
-
-<div class="section" style="animation-delay:35s">
-<p>
-You are the fire I would reach for<br>
-Without fear of being burned<br>
-The warmth I would choose<br>
-Even knowing the cost
-</p>
-</div>
-
-<div class="section" style="animation-delay:50s">
-<p>
-I was at peace in my own world<br>
-Wrapped in the comfort of solitude<br>
-But then you appeared<br>
-Like a comet streaking across my night sky
-</p>
-</div>
-
-<div class="section" style="animation-delay:65s">
-<p>
-Your presence was more than just a spark<br>
-It was a blaze that lit up my existence
-</p>
-</div>
-
-<!-- NEW YEAR END -->
-<div id="newYearEnd">
-  <div>
-    <h1>Happy New Year</h1>
-    <h2>May this year be kinder,<br>calmer,<br>and brighter for you</h2>
-    <p>
-      Not everything needs to be said.<br>
-      Some wishes are meant to be felt.
-    </p>
-    <span class="signature">— A quiet wish, just for you</span>
-  </div>
-</div>
-
 <script>
-/* START */
-document.getElementById("startScreen").onclick=()=>{
-  document.getElementById("startScreen").style.display="none";
-  document.getElementById("music").src =
-  "https://www.youtube.com/embed/2Bc9ET7XGDg?autoplay=1&loop=1&playlist=2Bc9ET7XGDg";
-};
-
-/* STARS */
+// STAR BACKGROUND
 const c=document.getElementById("stars"),ctx=c.getContext("2d");
-function resize(){c.width=innerWidth;c.height=innerHeight}
+function resize(){c.width=innerWidth;c.height=innerHeight;}
 resize();addEventListener("resize",resize);
-let stars=[...Array(200)].map(()=>({
-  x:Math.random()*c.width,
-  y:Math.random()*c.height,
-  r:Math.random()*1.5
-}));
-function draw(){
+let stars=[...Array(200)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.5}));
+function drawStars(){
   ctx.clearRect(0,0,c.width,c.height);
   ctx.fillStyle="white";
   stars.forEach(s=>{
@@ -251,34 +217,67 @@ function draw(){
     s.y+=0.2;
     if(s.y>c.height)s.y=0;
   });
-  requestAnimationFrame(draw);
+  requestAnimationFrame(drawStars);
 }
-draw();
+drawStars();
 
-/* FLOATING LOVE CREATION (YOUR IDEA) */
-const N=100;
-const ui=document.getElementById("ui");
-for(let i=1;i<=N;i++){
-  const love=document.createElement("div");
-  love.className="love";
-  love.style.setProperty("--i",i);
+// PAGE NAVIGATION
+let current=0;
+const pages=document.querySelectorAll(".page");
+function nextPage(){
+  pages[current].classList.remove("active");
+  current++;
+  if(current<pages.length){
+    pages[current].classList.add("active");
 
-  const h=document.createElement("div");
-  h.className="love_horizontal";
+    // START MUSIC on first tap
+    if(current===1){
+      document.getElementById("music").src="https://www.youtube.com/embed/2Bc9ET7XGDg?autoplay=1&loop=1&playlist=2Bc9ET7XGDg";
+    }
 
-  const v=document.createElement("div");
-  v.className="love_vertical";
+    // COUNTDOWN PAGE
+    if(current===2){
+      startCountdown();
+    }
 
-  const w=document.createElement("div");
-  w.className="love_word";
-  w.textContent="I love you";
+    // PAGE 7: Falling petals
+    if(current===6){
+      for(let i=0;i<30;i++){
+        let p=document.createElement("div");
+        p.className="petal";
+        p.style.left=Math.random()*100+"vw";
+        p.style.animationDuration=5+Math.random()*5+"s";
+        document.body.appendChild(p);
+      }
+    }
+  }
+}
 
-  v.appendChild(w);
-  h.appendChild(v);
-  love.appendChild(h);
-  ui.appendChild(love);
+// COUNTDOWN SEQUENCE
+function startCountdown(){
+  const cd=document.getElementById("countdown");
+  let nums=[3,2,1,"HAPPY","NEW","YEAR"];
+  let idx=0;
+  cd.textContent=nums[idx];
+  let interval=setInterval(()=>{
+    idx++;
+    if(idx>=nums.length){
+      clearInterval(interval);
+      nextPage();
+      animateCats();
+      return;
+    }
+    cd.textContent=nums[idx];
+  },1000);
+}
+
+// CAT ANIMATION
+function animateCats(){
+  const left=document.getElementById("catLeft");
+  const right=document.getElementById("catRight");
+  left.style.animation="bump 1s ease-in-out infinite";
+  right.style.animation="bump 1s ease-in-out 0.5s infinite";
 }
 </script>
-
 </body>
 </html>
