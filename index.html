@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <title>New Year Surprise for Shrija</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
+/* RESET */
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Georgia",serif;}
 body{background:black;color:white;overflow:hidden;}
-.page{width:100vw;height:100vh;display:none;align-items:center;justify-content:center;text-align:center;padding:30px;position:relative;}
+.page{width:100vw;height:100vh;display:none;align-items:center;justify-content:center;text-align:center;padding:20px;position:relative;}
 .page.active{display:flex;flex-direction:column;}
 h1{font-size:2.4rem;margin-bottom:20px;}
 p{font-size:1.3rem;line-height:1.8;}
@@ -78,30 +78,37 @@ canvas{position:fixed;inset:0;z-index:-2;}
 .cat.left{left:35%;}
 .cat.right{left:55%;}
 
-/* CAT FACE BUMP ANIMATION */
+/* CAT BUMP ANIMATION */
 @keyframes bump{
   0%{transform:translateY(0);}
-  50%{transform:translateY(-20px);}
+  50%{transform:translateY(-20px) rotate(-10deg);}
   100%{transform:translateY(0);}
 }
 
-/* FLOWER PETALS */
-.petal{
-  position:absolute;
-  top:-10%;
-  width:20px;height:20px;
-  background:pink;
-  border-radius:50%;
-  opacity:0.8;
-  animation:fall linear infinite;
+/* FLOWER PAGE 1 */
+.flower-container{
+  position:relative;
+  width:100%;
+  height:100%;
 }
-@keyframes fall{
+.flower{
+  position:absolute;
+  width:150px;
+  height:150px;
+  animation:float 6s ease-in-out infinite;
+}
+.flower:nth-child(1){top:10%;left:20%;animation-delay:0s;}
+.flower:nth-child(2){top:30%;left:60%;animation-delay:1s;}
+.flower:nth-child(3){top:50%;left:40%;animation-delay:2s;}
+.flower:nth-child(4){top:70%;left:70%;animation-delay:3s;}
+@keyframes float{
   0%{transform:translateY(0) rotate(0deg);}
-  100%{transform:translateY(110vh) rotate(360deg);}
+  50%{transform:translateY(-20px) rotate(15deg);}
+  100%{transform:translateY(0) rotate(0deg);}
 }
 
-/* BLOOM FLOWER */
-.flower{
+/* FLOWER PAGE 2 BLOOM */
+.flower2{
   width:120px;height:120px;position:relative;
   animation:bloom 4s infinite alternate;
 }
@@ -139,7 +146,7 @@ canvas{position:fixed;inset:0;z-index:-2;}
   <div class="countdown" id="countdown">3</div>
 </div>
 
-<!-- PAGE 4: CAKE & CATS -->
+<!-- PAGE 4: CAKE + CATS -->
 <div class="page" id="page4">
   <div class="cake"></div>
   <div class="cat left" id="catLeft"></div>
@@ -147,7 +154,7 @@ canvas{position:fixed;inset:0;z-index:-2;}
   <button onclick="nextPage()">Next</button>
 </div>
 
-<!-- PAGE 5: POEMS -->
+<!-- PAGE 5: POEM -->
 <div class="page" id="page5">
   <p>
     I know we will never be together<br>
@@ -171,25 +178,27 @@ canvas{position:fixed;inset:0;z-index:-2;}
   <button onclick="nextPage()">Next</button>
 </div>
 
-<!-- PAGE 7: FLOWER ANIMATION 1 -->
+<!-- PAGE 6: FLOWER ANIMATION 1 -->
 <div class="page" id="page7">
-  <h1>🌸</h1>
-  <p>Some feelings fall softly, like petals.</p>
+  <div class="flower-container">
+    <img src="flower1.png" class="flower">
+    <img src="flower2.png" class="flower">
+    <img src="flower3.png" class="flower">
+    <img src="flower4.png" class="flower">
+  </div>
   <button onclick="nextPage()">Next</button>
 </div>
 
-<!-- PAGE 8: FLOWER ANIMATION 2 -->
+<!-- PAGE 7: FLOWER ANIMATION 2 -->
 <div class="page" id="page8">
-  <h1>🌸</h1>
-  <p>Some bloom silently, yet beautifully.</p>
-  <div class="flower">
+  <div class="flower2">
     <div class="petal2"></div>
     <div class="petal2"></div>
     <div class="petal2"></div>
     <div class="petal2"></div>
     <div class="petal2"></div>
   </div>
-  <button onclick="nextPage()">Finish</button>
+  <button onclick="nextPage()">Next</button>
 </div>
 
 <!-- FINAL PAGE -->
@@ -240,15 +249,12 @@ function nextPage(){
       startCountdown();
     }
 
-    // PAGE 7: Falling petals
-    if(current===6){
-      for(let i=0;i<30;i++){
-        let p=document.createElement("div");
-        p.className="petal";
-        p.style.left=Math.random()*100+"vw";
-        p.style.animationDuration=5+Math.random()*5+"s";
-        document.body.appendChild(p);
-      }
+    // CAT ANIMATION
+    if(current===3){
+      const left=document.getElementById("catLeft");
+      const right=document.getElementById("catRight");
+      left.style.animation="bump 1s ease-in-out infinite";
+      right.style.animation="bump 1s ease-in-out 0.5s infinite";
     }
   }
 }
@@ -264,19 +270,10 @@ function startCountdown(){
     if(idx>=nums.length){
       clearInterval(interval);
       nextPage();
-      animateCats();
       return;
     }
     cd.textContent=nums[idx];
   },1000);
-}
-
-// CAT ANIMATION
-function animateCats(){
-  const left=document.getElementById("catLeft");
-  const right=document.getElementById("catRight");
-  left.style.animation="bump 1s ease-in-out infinite";
-  right.style.animation="bump 1s ease-in-out 0.5s infinite";
 }
 </script>
 </body>
