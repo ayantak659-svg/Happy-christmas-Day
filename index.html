@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>New Year Wish</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ===== GLOBAL ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:black;
+  overflow:hidden;
+  font-family:"Playfair Display",serif;
+  color:white;
+}
+
+/* ===== STAR BACKGROUND ===== */
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+}
+
+/* ===== START SCREEN ===== */
+#startScreen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:black;
+  z-index:10;
+  cursor:pointer;
+}
+#startScreen h1{
+  font-size:34px;
+  letter-spacing:3px;
+  margin-bottom:15px;
+}
+#startScreen p{
+  font-size:18px;
+  opacity:.8;
+}
+
+/* ===== POEM SECTIONS ===== */
+.section{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:40px;
+  opacity:0;
+  animation:fadeText 6s ease forwards;
+}
+.section p{
+  font-size:24px;
+  line-height:1.8;
+  text-shadow:0 0 20px rgba(255,255,255,.3);
+}
+@keyframes fadeText{
+  0%{opacity:0;transform:translateY(30px)}
+  20%{opacity:1}
+  80%{opacity:1}
+  100%{opacity:0;transform:translateY(-30px)}
+}
+
+/* ===== FLOATING LOVE (YOUR CODE – FIXED) ===== */
+#ui{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.love{
+  position:absolute;
+  top:50%;
+  left:50%;
+  --i:1;
+}
+
+.love_horizontal{
+  animation:horizontal 10s infinite alternate ease-in-out;
+  animation-delay:calc(var(--i) * -300ms);
+}
+
+.love_vertical{
+  animation:vertical 20s infinite linear;
+  animation-delay:calc(var(--i) * -300ms);
+}
+
+.love_word{
+  color:#ea80b0;
+  font-size:1.4rem;
+  letter-spacing:2px;
+  white-space:nowrap;
+  text-shadow:0 0 12px #fff;
+}
+
+@keyframes horizontal{
+  from{transform:translateX(-220px)}
+  to{transform:translateX(220px)}
+}
+
+@keyframes vertical{
+  0%{transform:translateY(180px)}
+  50%{transform:translateY(-180px)}
+  100%{transform:translateY(180px)}
+}
+
+/* ===== NEW YEAR END ===== */
+#newYearEnd{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  opacity:0;
+  animation:showEnd 3s ease forwards;
+  animation-delay:95s;
+  z-index:5;
+}
+@keyframes showEnd{
+  to{opacity:1}
+}
+#newYearEnd h1{
+  font-size:52px;
+  letter-spacing:4px;
+}
+#newYearEnd h2{
+  margin-top:20px;
+  font-size:26px;
+  line-height:1.6;
+}
+#newYearEnd p{
+  margin-top:25px;
+  font-size:18px;
+  opacity:.85;
+}
+.signature{
+  display:block;
+  margin-top:30px;
+  opacity:.6;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<!-- START -->
+<div id="startScreen">
+  <h1>A wish to you my cutie pie😊</h1>
+  <p>tap here♥️</p>
+</div>
+
+<!-- MUSIC -->
+<iframe id="music" src="" allow="autoplay" style="display:none"></iframe>
+
+<!-- FLOATING LOVE -->
+<div id="ui"></div>
+
+<!-- POEMS -->
+<div class="section" style="animation-delay:5s">
+<p>
+I know we will never be together<br>
+But please<br>
+Allow me this much<br>
+Let me tell you how<br>
+In a sky crowded in stars<br>
+You remain the only moon I see
+</p>
+</div>
+
+<div class="section" style="animation-delay:20s">
+<p>
+Among billions of faces in this world<br>
+It is only your eyes I ever search for
+</p>
+</div>
+
+<div class="section" style="animation-delay:35s">
+<p>
+You are the fire I would reach for<br>
+Without fear of being burned<br>
+The warmth I would choose<br>
+Even knowing the cost
+</p>
+</div>
+
+<div class="section" style="animation-delay:50s">
+<p>
+I was at peace in my own world<br>
+Wrapped in the comfort of solitude<br>
+But then you appeared<br>
+Like a comet streaking across my night sky
+</p>
+</div>
+
+<div class="section" style="animation-delay:65s">
+<p>
+Your presence was more than just a spark<br>
+It was a blaze that lit up my existence
+</p>
+</div>
+
+<!-- NEW YEAR END -->
+<div id="newYearEnd">
+  <div>
+    <h1>Happy New Year</h1>
+    <h2>May this year be kinder,<br>calmer,<br>and brighter for you</h2>
+    <p>
+      Not everything needs to be said.<br>
+      Some wishes are meant to be felt.
+    </p>
+    <span class="signature">— A quiet wish, just for you</span>
+  </div>
+</div>
+
+<script>
+/* START */
+document.getElementById("startScreen").onclick=()=>{
+  document.getElementById("startScreen").style.display="none";
+  document.getElementById("music").src =
+  "https://www.youtube.com/embed/2Bc9ET7XGDg?autoplay=1&loop=1&playlist=2Bc9ET7XGDg";
+};
+
+/* STARS */
+const c=document.getElementById("stars"),ctx=c.getContext("2d");
+function resize(){c.width=innerWidth;c.height=innerHeight}
+resize();addEventListener("resize",resize);
+let stars=[...Array(200)].map(()=>({
+  x:Math.random()*c.width,
+  y:Math.random()*c.height,
+  r:Math.random()*1.5
+}));
+function draw(){
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.fillStyle="white";
+  stars.forEach(s=>{
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fill();
+    s.y+=0.2;
+    if(s.y>c.height)s.y=0;
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* FLOATING LOVE CREATION (YOUR IDEA) */
+const N=100;
+const ui=document.getElementById("ui");
+for(let i=1;i<=N;i++){
+  const love=document.createElement("div");
+  love.className="love";
+  love.style.setProperty("--i",i);
+
+  const h=document.createElement("div");
+  h.className="love_horizontal";
+
+  const v=document.createElement("div");
+  v.className="love_vertical";
+
+  const w=document.createElement("div");
+  w.className="love_word";
+  w.textContent="I love you";
+
+  v.appendChild(w);
+  h.appendChild(v);
+  love.appendChild(h);
+  ui.appendChild(love);
+}
+</script>
+
+</body>
+</html>
