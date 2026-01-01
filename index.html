@@ -2,155 +2,431 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy New Year 🎉</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Year Surprise</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
 
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Segoe UI', sans-serif;
-  overflow: hidden;
-  background: #000;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: black;
   color: white;
+  overflow: hidden;
+  font-family: 'Playfair Display', serif;
+  position: relative;
 }
 
-/* Pages */
-.page {
+/* 🌌 Galaxy Background */
+#galaxy {
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(120, 0, 255, .18), transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(0, 150, 255, .15), transparent 45%),
+    black;
+  z-index: -1;
+}
+
+/* ✨ Stars */
+.star {
   position: absolute;
-  inset: 0;
-  display: flex;
+  width: 1.5px;
+  height: 1.5px;
+  background: white;
+  opacity: .6;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  from { transform: translateY(-10vh); }
+  to   { transform: translateY(110vh); }
+}
+
+/* PAGE SETUP */
+.page {
+  position: fixed; inset: 0;
+  display: none;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  transition: opacity 1s ease;
+  text-align: center;
+  padding: 20px;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 90%;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+.page.active { display: flex; }
+
+/* INTRO */
+#intro {
+  background: linear-gradient(to bottom, rgba(0,0,0,.85), black);
+}
+#wish {
+  font-size: 40px;
+  opacity: 0;
+  animation: fadeUp 3s forwards;
+}
+#tap {
+  margin-top: 18px;
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  opacity: 0;
+  animation: glow 2.5s infinite alternate, fadeIn 2s forwards;
+  animation-delay: 2.5s;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(25px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+@keyframes glow {
+  from { text-shadow: 0 0 6px rgba(255,255,255,.2); }
+  to   { text-shadow: 0 0 16px rgba(255,255,255,.7); }
 }
 
-.hidden {
+/* COUNTDOWN */
+.countdown {
+  font-size: 60px;
+  font-family: 'Cinzel', serif;
+  color: #fff;
+  text-shadow: 0 0 15px #ff0;
+}
+
+/* HAPPY NEW YEAR letters */
+.hnyLetter {
+  position: absolute;
+  font-size: 50px;
+  font-family: 'Cinzel', serif;
+  color: #ffddaa;
+  text-shadow: 0 0 12px #fff;
+  top: -60px;
+  opacity: 0;
+  animation: fallLetter 2s forwards;
+}
+@keyframes fallLetter {
+  0%   { transform: translateY(-60px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(60vh) rotate(360deg); opacity: 1; }
+}
+
+/* POEMS */
+.line, .line2 {
+  font-size: 22px;
+  letter-spacing: 0.6px;
+  margin: 8px 0;
+  opacity: 0;
+  transform: translateY(18px);
+  color: rgba(255,255,255,0.92);
+  text-shadow: 0 0 10px rgba(255,255,255,0.12);
+  max-width: 100%;
+  white-space: normal;
+  word-wrap: break-word;
+}
+.line2 {
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+  letter-spacing: 1.5px;
+  transform: translateY(22px);
+  color: rgba(255,255,255,0.95);
+  text-shadow: 0 0 14px rgba(255,255,255,0.15);
+}
+
+/* FLOWERS */
+#flowers-css {
+  position: fixed; inset: 0;
+  background: radial-gradient(circle at bottom, #061a1f, #000);
+  overflow: hidden;
   opacity: 0;
   pointer-events: none;
+  z-index: 1;
 }
-
-/* Text */
-h1 {
-  font-size: 3rem;
-  text-align: center;
-}
-
-.tap {
-  margin-top: 20px;
-  opacity: 0.8;
-}
-
-/* LAST PAGE FLOWER EFFECT */
 .flower {
   position: absolute;
-  bottom: 10vmin;
-  transform-origin: bottom center;
-  z-index: 10;
-  --fl-speed: 0.8s;
+  bottom: -20px;
+  width: 6px;
+  height: 160px;
+  background: linear-gradient(#4affc3, #1a5);
+  border-radius: 10px;
+  animation: grow 4s ease forwards;
+}
+.flower::before {
+  content: '';
+  position: absolute;
+  top: -18px;
+  left: -14px;
+  width: 36px;
+  height: 36px;
+  background: radial-gradient(circle, #ffd6ff, #ff6ec7);
+  border-radius: 50%;
+}
+.f1 { left: 30%; animation-delay: 0s; }
+.f2 { left: 50%; animation-delay: 1.2s; }
+.f3 { left: 70%; animation-delay: 2.2s; }
+@keyframes grow {
+  from { height: 0; opacity: 0; }
+  to   { height: 180px; opacity: 1; }
 }
 
-/* Canvas */
-canvas {
-  position: absolute;
-  inset: 0;
+/* FLOWER CANVAS */
+#flowerCanvas {
+  position: fixed; inset: 0;
+  background: transparent;
+  z-index: 2;
+  display: none;
 }
+#tapText {
+  position: fixed;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.6);
+  display: none;
+}
+
+/* FINAL GREETING */
+#finalGreeting {
+  font-size: 38px;
+  color: #ffddaa;
+  text-shadow: 0 0 15px #fff;
+  opacity: 0;
+  animation: fadeUp 2s forwards;
+}
+
+/* Firework sparks */
+.spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #fff;
+  opacity: 0;
+  animation: explode 1.2s ease-out forwards;
+}
+@keyframes explode {
+  0%   { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  50%  { opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) scale(1.5); opacity: 0; }
+}
+
 </style>
 </head>
-
 <body>
 
-<!-- PAGE 1 -->
-<div class="page" id="page1">
-  <h1>✨ Something Special ✨</h1>
-  <div class="tap">Tap to continue</div>
+<div id="galaxy"></div>
+
+<!-- INTRO -->
+<div id="intro" class="page active">
+  <div id="wish">A wish to you my cutie pie😊</div>
+  <div id="tap">tap here♥️</div>
 </div>
 
-<!-- PAGE 2 -->
-<div class="page hidden" id="page2">
-  <h1>🎉 Happy New Year 🎉</h1>
-  <div class="tap">Tap again</div>
+<!-- COUNTDOWN -->
+<div id="countdownPage" class="page">
+  <div class="countdown" id="countNum">3</div>
 </div>
 
-<!-- PAGE 3 (LAST) -->
-<div class="page hidden" id="page3">
-  <h1>🌸 Wishing You Joy 🌸</h1>
-
-  <div class="flower">🌺</div>
-
-  <canvas id="canvas"></canvas>
+<!-- CATS + CAKE PAGE -->
+<div id="cakeCatsPage" class="page">
+  <canvas id="catsCanvas" width="400" height="400"></canvas>
 </div>
 
-<!-- YOUTUBE AUDIO (AUTOPLAY SAFE) -->
-<iframe
-  id="music"
-  width="0"
-  height="0"
-  src="https://www.youtube.com/embed/2Bc9ET7XGDg?autoplay=1&mute=1&loop=1&playlist=2Bc9ET7XGDg"
-  frameborder="0"
-  allow="autoplay">
-</iframe>
+<!-- FIRST POEM -->
+<div id="poem" class="page">
+  <div class="line">I know we will never be together</div>
+  <div class="line">But please</div>
+  <div class="line">Allow me this much</div>
+  <div class="line">Let me tell you how</div>
+  <div class="line">In a sky crowded in stars</div>
+  <div class="line">You remain the only moon</div>
+  <div class="line">I see</div>
+  <div class="line">How</div>
+  <div class="line">Among billions of faces in this world</div>
+  <div class="line">It is only your eyes</div>
+  <div class="line">I ever search for</div>
+  <div class="line">Let me tell you</div>
+  <div class="line">How you are the fire</div>
+  <div class="line">I would reach for</div>
+  <div class="line">Without fear of being burned</div>
+  <div class="line">The warmth I would choose</div>
+  <div class="line">Even knowing the cost</div>
+  <div class="line">I know we will never be together</div>
+  <div class="line">But, please</div>
+  <div class="line">Allow me to love you aloud</div>
+  <div class="line">To love in ways you have never heard</div>
+  <div class="line">And perhaps never felt</div>
+  <div class="line">Even if only once</div>
+</div>
+
+<!-- SECOND POEM -->
+<div id="poem2" class="page">
+  <div class="line2">I WAS AT PEACE</div>
+  <div class="line2">IN MY OWN WORLD</div>
+  <div class="line2">WRAPPED IN THE COMFORT</div>
+  <div class="line2">OF SOLITUDE</div>
+  <div class="line2">BUT THEN YOU</div>
+  <div class="line2">APPEARED</div>
+  <div class="line2">LIKE A COMET STREAKING</div>
+  <div class="line2">ACROSS MY NIGHT SKY</div>
+  <div class="line2">YOUR PRESENCE WAS</div>
+  <div class="line2">MORE THAN JUST A SPARK</div>
+  <div class="line2">IT WAS A BLAZE THAT</div>
+  <div class="line2">LIT UP MY EXISTENCE</div>
+</div>
+
+<!-- FLOWERS -->
+<div id="flowers-css" class="page">
+  <div class="flower f1"></div>
+  <div class="flower f2"></div>
+  <div class="flower f3"></div>
+</div>
+
+<canvas id="flowerCanvas"></canvas>
+<div id="tapText">Tap anywhere to grow flowers</div>
+
+<!-- FINAL GREETING -->
+<div id="finalGreeting" class="page">✨ HAPPY NEW YEAR 2026 ✨</div>
+
+<!-- MUSIC -->
+<iframe id="music" src="" allow="autoplay" style="display:none"></iframe>
 
 <script>
-/* Page navigation */
-let current = 1;
+// ⭐ Stars
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.left = Math.random() * 100 + 'vw';
+  s.style.top = Math.random() * 100 + 'vh';
+  s.style.animationDuration = (5 + Math.random() * 8) + 's';
+  document.body.appendChild(s);
+}
 
-document.body.addEventListener('click', () => {
-  if (current === 1) {
-    page1.classList.add('hidden');
-    page2.classList.remove('hidden');
-    current++;
-  } else if (current === 2) {
-    page2.classList.add('hidden');
-    page3.classList.remove('hidden');
-    current++;
-    runLastPageCode();
-  }
+// 🌟 Pages
+const pages = document.querySelectorAll('.page');
+function showPage(index) {
+  pages.forEach(p => p.classList.remove('active'));
+  if (typeof index === 'number') pages[index].classList.add('active');
+  else if (typeof index === 'string') document.getElementById(index).classList.add('active');
+}
+
+// 🌟 FLOWER CANVAS
+const canvas = document.getElementById('flowerCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function flower(x, y) {
+  const hue = Math.random() * 360;
+  ctx.strokeStyle = `hsl(${hue}, 80%, 70%)`;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x, y - 80);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(x, y - 90, 10, 0, Math.PI * 2);
+  ctx.fillStyle = `hsl(${hue}, 80%, 70%)`;
+  ctx.fill();
+}
+
+canvas.addEventListener('click', e => {
+  flower(e.clientX, e.clientY);
+  // Add a small firework spark
+  const spark = document.createElement('div');
+  spark.className = 'spark';
+  spark.style.left = e.clientX + 'px';
+  spark.style.top = e.clientY + 'px';
+  spark.style.setProperty('--x', (Math.random() * 100 - 50) + 'px');
+  spark.style.setProperty('--y', (Math.random() * 100 - 50) + 'px');
+  document.body.appendChild(spark);
+  setTimeout(() => spark.remove(), 1200);
 });
 
-/* Unmute music after load */
-setTimeout(() => {
-  const iframe = document.getElementById('music');
-  iframe.src = iframe.src.replace("mute=1", "mute=0");
-}, 500);
+// 🌟 Intro Tap to Start
+document.getElementById('intro').addEventListener('click', () => {
+  document.getElementById('music').src = "https://www.youtube.com/embed/2Bc9ET7XGDg?autoplay=1&loop=1&playlist=2Bc9ET7XGDg";
+  
+  // Countdown 3..2..1
+  showPage(1);
+  let count = [3, 2, 1];
+  let i = 0;
+  const numEl = document.getElementById('countNum');
+  const interval = setInterval(() => {
+    if (i < count.length) {
+      numEl.textContent = count[i];
+      i++;
+    } else {
+      clearInterval(interval);
+      startFallingLetters();
+    }
+  }, 1000);
+});
 
-/* LAST PAGE CODE */
-function runLastPageCode() {
-
-  /* ===== YOUR POINTER CODE (FIXED) ===== */
-  const canvasEl = document.querySelector('#canvas');
-
-  const pointer = {
-    x: 0.66,
-    y: 0.3,
-    clicked: true
-  };
-
-  window.setTimeout(() => {
-    pointer.x = 0.75;
-    pointer.y = 0.5;
-    pointer.clicked = true;
-  }, 700);
-
-  /* Simple canvas animation */
-  const ctx = canvasEl.getContext('2d');
-  canvasEl.width = innerWidth;
-  canvasEl.height = innerHeight;
-
-  function draw() {
-    ctx.clearRect(0,0,canvasEl.width,canvasEl.height);
-    ctx.fillStyle = 'rgba(255,255,255,0.8)';
-    ctx.beginPath();
-    ctx.arc(pointer.x * canvasEl.width, pointer.y * canvasEl.height, 10, 0, Math.PI * 2);
-    ctx.fill();
-    requestAnimationFrame(draw);
-  }
-
-  draw();
-}
-</script>
-
-</body>
-</html>
+// 🎉 Falling HAPPY NEW YEAR letters + Cats + Cake
+function startFallingLetters() {
+  const letters = "HAPPY NEW YEAR".split('');
+  showPage('cakeCatsPage');
+  
+  letters.forEach((l, idx) => {
+    const span = document.createElement('div');
+    span.className = 'hnyLetter';
+    span.textContent = l;
+    span.style.left = 10 + idx * 8 + 'vw';
+    span.style.animationDelay = (idx * 200) + 'ms';
+    document.body.appendChild(span);
+    
+    // Add a small firework spark below each letter
+    setTimeout(() => {
+      const spark = document.createElement('div');
+      spark.className = 'spark';
+      spark.style.left = (10 + idx * 8) + 'vw';
+      spark.style.top = '60vh';
+      spark.style.setProperty('--x', (Math.random() * 100 - 50) + 'px');
+      spark.style.setProperty('--y', (Math.random() * 100 - 50) + 'px');
+      document.body.appendChild(spark);
+      setTimeout(() => spark.remove(), 1200);
+    }, 200 + idx * 200);
+  });
+  
+  // Draw cats and cake on canvas after letters
+  setTimeout(() => {
+    const catCanvas = document.getElementById('catsCanvas');
+    const cctx = catCanvas.getContext('2d');
+    const w = catCanvas.width;
+    const h = catCanvas.height;
+    
+    // Background
+    cctx.fillStyle = 'rgba(0,0,0,0.8)';
+    cctx.fillRect(0, 0, w, h);
+    
+    // Draw a simple cake
+    cctx.fillStyle = '#f9c';
+    cctx.fillRect(w/2 - 40, h - 60, 80, 60); // base
+    cctx.fillStyle = '#fdd';
+    cctx.fillRect(w/2 - 30, h - 80, 60, 20); // middle
+    cctx.fillStyle = '#ffe';
+    cctx.fillRect(w/2 - 20, h - 100, 40, 20); // top
+    cctx.fillStyle = '#f00';
+    cctx.fillRect(w/2 - 5, h - 120, 10, 20); // candle
+    cctx.fillStyle = '#ff0';
+    cctx.fillRect(w/2 - 3, h - 125, 6, 10); // flame
+    
+    // Draw a simple cat
+    // Body
+    cctx.fillStyle = '#888';
+    cctx.beginPath();
+    cctx.ellipse(w/2 - 50, h/2 + 20, 30, 20, 0, 0, Math.PI * 2);
+    cctx.fill();
+    // Head
+    cctx.beginPath();
+    cctx.ellipse(w/2 - 50, h/2 - 10, 20, 20, 0, 0, Math.PI * 2);
+    cctx.fill();
+    // Ears
+    cctx.beginPath();
+    cctx.moveTo(w/2 - 60, h/2 - 20);
+    cctx.lineTo(w/2 - 50, h/2 - 35);
+    cctx.lineTo(w/2 -
